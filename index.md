@@ -12,7 +12,7 @@
 
 
 ![Model](assets/figure_model.png)
-*Simplified training and operating scheme of the proposed model. The model can be used (a) with matching inputs or (b) by mixing low-resolution images with audios from other videos. The low-resolution image (8 × 8 pixels) is fed to an encoder El to obtain an intermediate latent representation. A residual is computed by fusing in the network F the encoded audio track (through the encoder Ea) with the encoded low-resolution image. The residual is used to update the latent representation of the low-resolution image and then produce the high-resolution image through the generator G.*
+***Simplified training and operating scheme of the proposed model.*** *The model can be used (a) with matching inputs or (b) by mixing low-resolution images with audios from other videos. The low-resolution image (8 × 8 pixels) is fed to an encoder El to obtain an intermediate latent representation. A residual is computed by fusing in the network F the encoded audio track (through the encoder Ea) with the encoded low-resolution image. The residual is used to update the latent representation of the low-resolution image and then produce the high-resolution image through the generator G.*
 
 ___
 
@@ -25,7 +25,10 @@ ___
 
 # Results
 
-![Model](assets/comparison.png)
-*Comparison to other super-resolution methods on our test set. The first column shows the 8 × 8 pixels in- puts; the second column shows the output of LapSRN; the third column shows the output of W-SRNet. Our model is shown in the fourth column. The ground-truth high-resolution image is shown in the last column.*
+<p align="center">
+    <img src="assets/comparison.png" width="600">
+</p>
+
+***Comparison to other super-resolution methods on our test set.*** *The first column shows the 8 × 8 pixels in- puts; the second column shows the output of LapSRN; the third column shows the output of W-SRNet. Our model is shown in the fourth column. The ground-truth high-resolution image is shown in the last column.*
 
 
