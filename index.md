@@ -1,13 +1,18 @@
 <p align="center">
-  <b style="font-size: 24px">Paper:</b><br>
-  <a href="https://arxiv.org/abs/1909.12780" style="font-size: 24px; text-decoration: none">[Arxiv]</a>
+  <a href="https://gmeishvili.github.io" style="font-size: 21px; text-decoration: none">Givi Meishvili</a> 
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
+  <a href="https://sjenni.github.io" style="font-size: 21px; text-decoration: none">Simon Jenni</a> 
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
+  <a href="http://www.cvg.unibe.ch/people/favaro" style="font-size: 21px; text-decoration: none">Paolo Favaro</a>
 </p>
-  
+
 
 <p align="center">
-  <b style="font-size: 24px">Code:</b><br>
-  <a href="https://github.com/gmeishvili/ear_for_face_super_resolution" style="font-size: 24px; text-decoration: none">[GitHub]</a>
+  <a href="https://arxiv.org/abs/1909.12780" style="font-size: 21px; text-decoration: none">[Paper]</a>
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
+  <a href="https://github.com/gmeishvili/ear_for_face_super_resolution" style="font-size: 21px; text-decoration: none">[GitHub]</a> 
 </p>
+
   
 
 
