@@ -11,5 +11,5 @@ The code is based on Python 3.7 and tensorflow 1.13.
 
 ### 1. Setup
 
-- Download the following checkpoints: 
+- Download the checkpoints from https://drive.google.com/drive/folders/1YSXktBv0xZxdo41H_cNV8fzku2CdBZBK?usp=sharing
 - Run **test.py** to test the method on images and audio tracks from **test_data** directory.
