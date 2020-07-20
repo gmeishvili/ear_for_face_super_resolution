@@ -10,22 +10,26 @@ from utils import zeroCenter, revertZeroCenter, get_images, create_dir, load_tes
 
 import glob
 
+flags = tf.app.flags
+FLAGS = flags.FLAGS
+flags.DEFINE_string('DATA_PATH', 'test_data', '')
+flags.DEFINE_string('HIGH_RES_IMAGE_FOLDER', 'images', '')
+flags.DEFINE_string('AUDIO_FOLDER', 'audio', '')
+flags.DEFINE_string('OUTPUT_FOLDER', 'output', '')
+
 BATCH_SIZE = 1
 LR_ENCODER_SCOPE = "LOW_RES_ENCODER"
 AUDIO_ENCODER_SCOPE = "AUDIO_SPECTROGRAM_ENCODER"
 FUSION_SCOPE = "AUDIO_VISUAL_FUSER"
 STYLEGAN_CHECKPOINT = "checkpoint/network-snapshot-030929.pkl"
 FUSION_CHECKPOINT = "checkpoint/model-0"
-DATA_PATH = "test_data"
-HIGH_RES_IMAGE_FOLDER = "images"
-AUDIO_FOLDER = "audio"
-OUTPUT_FOLDER = "output"
 
-create_dir(os.path.join(DATA_PATH, OUTPUT_FOLDER))
+
+create_dir(os.path.join(FLAGS.DATA_PATH, FLAGS.OUTPUT_FOLDER))
 
 # Loading The List of Input High-Resolution Images and Corresponding Audio Tracks
-image_pathes = sorted(glob.glob(os.path.join(DATA_PATH, HIGH_RES_IMAGE_FOLDER) + "/*.png"))
-audio_pathes = sorted(glob.glob(os.path.join(DATA_PATH, AUDIO_FOLDER) + "/*.wav"))
+image_pathes = sorted(glob.glob(os.path.join(FLAGS.DATA_PATH, FLAGS.HIGH_RES_IMAGE_FOLDER) + "/*.png"))
+audio_pathes = sorted(glob.glob(os.path.join(FLAGS.DATA_PATH, FLAGS.AUDIO_FOLDER) + "/*.wav"))
 
 # Defining Input Placeholders
 image_path = tf.placeholder(tf.string)
@@ -115,7 +119,7 @@ with tf.get_default_session() as sess:
         # Third Is The Output of Low_Res_Encoder,
         # Fourth is The Result of Fusion
         imageio.imwrite(
-            im_path.replace(HIGH_RES_IMAGE_FOLDER, OUTPUT_FOLDER),
+            os.path.join(FLAGS.DATA_PATH,FLAGS.OUTPUT_FOLDER,os.path.basename(im_path)),
             np.hstack(
                 [
                     high_res_image_np[0, :, :, :],
