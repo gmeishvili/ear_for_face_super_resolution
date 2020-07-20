@@ -12,17 +12,18 @@ import glob
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
+flags.DEFINE_integer('BATCH_SIZE', 1, '')
 flags.DEFINE_string('DATA_PATH', 'test_data', '')
 flags.DEFINE_string('HIGH_RES_IMAGE_FOLDER', 'images', '')
 flags.DEFINE_string('AUDIO_FOLDER', 'audio', '')
 flags.DEFINE_string('OUTPUT_FOLDER', 'output', '')
+flags.DEFINE_string('STYLEGAN_CHECKPOINT', 'checkpoint/network-snapshot-030929.pkl', '')
+flags.DEFINE_string('FUSION_CHECKPOINT', 'checkpoint/model-0', '')
 
-BATCH_SIZE = 1
+# These variables are hard coded because they contain the names of different variable scopes of our encoders
 LR_ENCODER_SCOPE = "LOW_RES_ENCODER"
 AUDIO_ENCODER_SCOPE = "AUDIO_SPECTROGRAM_ENCODER"
 FUSION_SCOPE = "AUDIO_VISUAL_FUSER"
-STYLEGAN_CHECKPOINT = "checkpoint/network-snapshot-030929.pkl"
-FUSION_CHECKPOINT = "checkpoint/model-0"
 
 
 create_dir(os.path.join(FLAGS.DATA_PATH, FLAGS.OUTPUT_FOLDER))
@@ -42,7 +43,7 @@ high_res_image, low_res_image, audio, low_res_image_nearest = load_test_sample(i
 with tf.device("/GPU:0"):
     tflib.init_tf()
 
-    _, _, G = pickle.load(open(STYLEGAN_CHECKPOINT, "rb"))
+    _, _, G = pickle.load(open(FLAGS.STYLEGAN_CHECKPOINT, "rb"))
 
     Gs = tflib.Network(name=G.name, func_name="networks_stylegan.G_style", **G.static_kwargs)
 
@@ -51,7 +52,7 @@ with tf.device("/GPU:0"):
             input=low_res_image,
             num_channels=3,
             resolution=8,
-            batch_size=BATCH_SIZE,
+            batch_size=FLAGS.BATCH_SIZE,
             num_scales=3,
             n_filters=128,
             output_feature_size=512,
@@ -62,7 +63,7 @@ with tf.device("/GPU:0"):
             input=audio,
             num_channels=1,
             resolution=257,
-            batch_size=BATCH_SIZE,
+            batch_size=FLAGS.BATCH_SIZE,
             num_scales=6,
             n_filters=64,
             output_feature_size=512,
@@ -70,19 +71,19 @@ with tf.device("/GPU:0"):
 
     with tf.variable_scope(FUSION_SCOPE, reuse=tf.AUTO_REUSE):
         fused_mixed_input = FC3ResidualFuser(
-            lr_input=tf.reshape(encoded_input, shape=[BATCH_SIZE, 6144]),
-            audio_input=tf.reshape(audio_encoded_input, shape=[BATCH_SIZE, 6144]),
-            batch_size=BATCH_SIZE,
+            lr_input=tf.reshape(encoded_input, shape=[FLAGS.BATCH_SIZE, 6144]),
+            audio_input=tf.reshape(audio_encoded_input, shape=[FLAGS.BATCH_SIZE, 6144]),
+            batch_size=FLAGS.BATCH_SIZE,
         )
 
     low_res_encoded_image = tf.clip_by_value(
-        revertZeroCenter(get_images(encoded_input, Gs, BATCH_SIZE)),
+        revertZeroCenter(get_images(encoded_input, Gs, FLAGS.BATCH_SIZE)),
         clip_value_min=0,
         clip_value_max=1,
     )
 
     fused_image = tf.clip_by_value(
-        revertZeroCenter(get_images(fused_mixed_input, Gs, BATCH_SIZE)),
+        revertZeroCenter(get_images(fused_mixed_input, Gs, FLAGS.BATCH_SIZE)),
         clip_value_min=0,
         clip_value_max=1,
     )
@@ -97,7 +98,7 @@ fusion_variables = (
     + G_vars
 )
 
-fusion_variables_init_fn = tf.contrib.framework.assign_from_checkpoint_fn(FUSION_CHECKPOINT, fusion_variables)
+fusion_variables_init_fn = tf.contrib.framework.assign_from_checkpoint_fn(FLAGS.FUSION_CHECKPOINT, fusion_variables)
 
 with tf.get_default_session() as sess:
     # Loading All Encoder Weights From Checkpoint
